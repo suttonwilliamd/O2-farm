@@ -1,1 +1,1 @@
-# O2-farm
+# O²-farm
