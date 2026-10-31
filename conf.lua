@@ -1,12 +1,15 @@
--- conf.lua
+local config = require("config")
+
 function love.conf(t)
-    t.window.width = 1280
-    t.window.height = 720
-    t.window.resizable = false  -- Disable resizing
+    t.window.title = "O2-farm"
+    t.window.width = config.BASE_W
+    t.window.height = config.BASE_H
+    t.window.resizable = true
+    t.window.minwidth = config.MIN_WIDTH
+    t.window.minheight = config.MIN_HEIGHT
     t.window.vsync = 1
 
-    -- Mobile orientation locks
-    t.modules.joystick = false  -- Optional mobile optimizations
+    t.modules.joystick = false
     t.modules.physics = false
     
     if t.android then

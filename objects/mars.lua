@@ -34,7 +34,7 @@ function Mars.create_texture(size)
     love.graphics.ellipse("fill", size/2, size - size/6, 35, 12)  -- South pole
     
     love.graphics.setCanvas()
-    return canvas
+    return love.graphics.newImage(canvas:newImageData())
 end
 
 function Mars.update(dt)

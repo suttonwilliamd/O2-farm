@@ -1,5 +1,74 @@
 # O²-farm
 
+## Running the current prototype
+
+The runnable game is an **orbital scene prototype**: a procedurally generated
+starfield with rotating Earth and Mars. Farming, oxygen production, trading,
+pirate raids and the campaign described in the design document below are **not
+implemented gameplay**. The standalone plant/world/pirate modules are not
+connected to the scene.
+
+Install [LÖVE 11.5](https://love2d.org/) and run either the source directory or
+the packaged release:
+
+```powershell
+love .
+love game.love
+```
+
+If LÖVE is not on PATH, use its full executable path (for example,
+`& 'C:\Program Files\LOVE\love.exe' .`). No additional Lua packages are needed.
+
+### Controls
+
+| Control | Action |
+| --- | --- |
+| Space | Pause/resume planetary rotation |
+| F11 | Toggle desktop fullscreen |
+| Esc | Leave fullscreen without quitting |
+| H | Hide/show the on-screen controls |
+| Window close button | Quit |
+
+Rotation also pauses when the window loses focus. Returning to the window
+resumes rotation unless it was manually paused. Resizing and maximizing keep the
+entire 1280×720 scene visible, using black bars rather than stretching or cropping.
+
+### Packaging and regression checks
+
+After changing runtime Lua files or the font, rebuild the checked-in release:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\package.ps1
+```
+
+The packager includes root Lua files, `objects/`, `systems/` and the font only;
+it excludes Git history, tests, documentation and nested release archives.
+Commit the updated `game.love` alongside its source changes.
+
+Run the native regression suite from this repository (use `lovec.exe` on Windows
+to see console output):
+
+```powershell
+lovec tests "$PWD"
+```
+
+The checks cover pause/resume, held-key repeat, focus loss, minimum/square/ultrawide
+viewport geometry, preserved textures after a real display resize, and help
+rendering. For interactive smoke coverage, launch the game, maximize/restore,
+toggle fullscreen with F11/Esc, and exercise Space and H.
+
+### Prototype fixes
+
+- Replaced resize-triggered window recreation with a uniform, centered viewport;
+  maximizing no longer blanks the starfield and planets or disables resizing.
+- Baked procedural artwork into persistent images so display-mode transitions
+  preserve it instead of losing Canvas contents.
+- Added pause, fullscreen, focus-aware animation, and visible keyboard help.
+- Rebuilt `game.love` from runtime files only, removing bundled Git metadata and
+  stale/nested release content.
+
+## Design document (planned gameplay)
+
 ---
 
 ### **Table of Contents**  

@@ -2,9 +2,9 @@ local Stars = {}
 local config = require("config")
 
 function Stars.load()
-    Stars.canvas = love.graphics.newCanvas(config.BASE_W, config.BASE_H)
+    local canvas = love.graphics.newCanvas(config.BASE_W, config.BASE_H)
     
-    love.graphics.setCanvas(Stars.canvas)
+    love.graphics.setCanvas(canvas)
     love.graphics.setColor(0.05, 0.05, 0.1)
     love.graphics.rectangle("fill", 0, 0, config.BASE_W, config.BASE_H)
     
@@ -20,11 +20,12 @@ function Stars.load()
         )
     end
     love.graphics.setCanvas()
+    Stars.texture = love.graphics.newImage(canvas:newImageData())
 end
 
 function Stars.draw()
     love.graphics.setColor(1, 1, 1)
-    love.graphics.draw(Stars.canvas)
+    love.graphics.draw(Stars.texture)
 end
 
 return Stars

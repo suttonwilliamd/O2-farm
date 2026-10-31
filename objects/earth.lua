@@ -38,7 +38,8 @@ function Earth.create_texture(size)
     end
     
     love.graphics.setCanvas()
-    return canvas
+    -- Immutable images survive display-mode changes; Canvas contents do not.
+    return love.graphics.newImage(canvas:newImageData())
 end
 
 function Earth.update(dt)

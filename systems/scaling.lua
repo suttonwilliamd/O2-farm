@@ -2,27 +2,24 @@ local Scaling = {}
 local config = require("config")
 
 function Scaling.initialize()
-    love.window.setMode(config.BASE_W, config.BASE_H, {
-        resizable = true,
-        minwidth = config.MIN_WIDTH,
-        minheight = config.MIN_HEIGHT
-    })
-    Scaling.last_w, Scaling.last_h = love.graphics.getDimensions()
+    Scaling.update(love.graphics.getDimensions())
 end
 
-function Scaling.update()
-    local window_w, window_h = love.graphics.getDimensions()
-    
-    -- Maintain 16:9 aspect ratio
-    local current_ratio = window_w/window_h
-    if current_ratio > config.ASPECT_RATIO then
-        window_w = window_h * config.ASPECT_RATIO
-    else
-        window_h = window_w / config.ASPECT_RATIO
-    end
-    
-    love.window.setMode(window_w, window_h)
-    Scaling.last_w, Scaling.last_h = window_w, window_h
+function Scaling.update(window_w, window_h)
+    -- Keep a fixed logical scene without recreating the window or its canvases.
+    Scaling.scale = math.min(window_w / config.BASE_W, window_h / config.BASE_H)
+    Scaling.offset_x = (window_w - config.BASE_W * Scaling.scale) / 2
+    Scaling.offset_y = (window_h - config.BASE_H * Scaling.scale) / 2
+end
+
+function Scaling.begin()
+    love.graphics.push()
+    love.graphics.translate(Scaling.offset_x, Scaling.offset_y)
+    love.graphics.scale(Scaling.scale)
+end
+
+function Scaling.finish()
+    love.graphics.pop()
 end
 
 return Scaling
