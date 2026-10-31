@@ -4,11 +4,11 @@ Add-Type -AssemblyName System.IO.Compression.FileSystem
 
 $root = $PSScriptRoot
 $temporaryArchive = Join-Path ([System.IO.Path]::GetTempPath()) ([System.IO.Path]::GetRandomFileName() + '.zip')
-$files = @(Get-ChildItem -LiteralPath $root -File -Filter '*.lua')
-$files += Get-Item -LiteralPath (Join-Path $root 'NotoEmoji-Regular.ttf')
-foreach ($directory in @('objects', 'systems')) {
-    $files += Get-ChildItem -LiteralPath (Join-Path $root $directory) -Recurse -File -Filter '*.lua'
-}
+$files = @(
+    'main.lua', 'conf.lua', 'config.lua',
+    'objects/earth.lua', 'objects/mars.lua',
+    'systems/scaling.lua', 'systems/stars.lua'
+) | ForEach-Object { Get-Item -LiteralPath (Join-Path $root $_) }
 
 try {
     $archive = [System.IO.Compression.ZipFile]::Open($temporaryArchive, 'Create')
@@ -23,7 +23,7 @@ try {
         $archive.Dispose()
     }
     Move-Item -LiteralPath $temporaryArchive -Destination (Join-Path $root 'game.love') -Force
-    Write-Output 'Updated game.love (runtime sources and font only).'
+    Write-Output 'Updated game.love (seven active runtime sources only).'
 } finally {
     if (Test-Path -LiteralPath $temporaryArchive) {
         Remove-Item -LiteralPath $temporaryArchive

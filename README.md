@@ -35,14 +35,14 @@ entire 1280×720 scene visible, using black bars rather than stretching or cropp
 
 ### Packaging and regression checks
 
-After changing runtime Lua files or the font, rebuild the checked-in release:
+After changing runtime Lua files, rebuild the checked-in release:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\package.ps1
 ```
 
-The packager includes root Lua files, `objects/`, `systems/` and the font only;
-it excludes Git history, tests, documentation and nested release archives.
+The packager explicitly includes the seven active Lua runtime files. It excludes
+the dormant gameplay modules, unused font, Git history, tests, documentation and nested release archives.
 Commit the updated `game.love` alongside its source changes.
 
 Run the native regression suite from this repository (use `lovec.exe` on Windows
